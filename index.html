@@ -1,0 +1,207 @@
+<!DOCTYPE html>
+<html lang="zh">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Claude Code 指令速查表</title>
+<style>
+  * { box-sizing: border-box; margin: 0; padding: 0; }
+  body {
+    font-family: -apple-system, BlinkMacSystemFont, "Segoe UI", sans-serif;
+    background: #f5f4f0;
+    padding: 32px 24px;
+    color: #1a1a1a;
+  }
+  .page {
+    max-width: 860px;
+    margin: 0 auto;
+    background: #fff;
+    border-radius: 16px;
+    padding: 32px 32px 36px;
+    box-shadow: 0 2px 16px rgba(0,0,0,0.08);
+  }
+  h1 {
+    font-size: 20px;
+    font-weight: 600;
+    color: #111;
+    margin-bottom: 4px;
+  }
+  .subtitle {
+    font-size: 13px;
+    color: #888;
+    margin-bottom: 24px;
+  }
+  .section { margin-bottom: 22px; }
+  .section-title {
+    font-size: 10.5px;
+    font-weight: 600;
+    letter-spacing: 0.09em;
+    text-transform: uppercase;
+    color: #999;
+    margin-bottom: 8px;
+    padding-bottom: 6px;
+    border-bottom: 1px solid #ececec;
+  }
+  .grid { display: grid; gap: 6px; }
+  .grid-2 { grid-template-columns: 1fr 1fr; }
+  .grid-3 { grid-template-columns: 1fr 1fr 1fr; }
+  .item {
+    background: #fafaf9;
+    border: 1px solid #ececec;
+    border-radius: 8px;
+    padding: 8px 10px;
+    display: flex;
+    flex-direction: column;
+    gap: 4px;
+  }
+  .item code {
+    font-family: "SF Mono", "Fira Code", monospace;
+    font-size: 11.5px;
+    font-weight: 600;
+    color: #185FA5;
+    background: #e8f1fb;
+    padding: 2px 7px;
+    border-radius: 4px;
+    width: fit-content;
+  }
+  .item .key {
+    font-family: "SF Mono", "Fira Code", monospace;
+    font-size: 11.5px;
+    font-weight: 600;
+    color: #3B6D11;
+    background: #eaf3de;
+    padding: 2px 7px;
+    border-radius: 4px;
+    width: fit-content;
+  }
+  .item .cli {
+    font-family: "SF Mono", "Fira Code", monospace;
+    font-size: 11px;
+    font-weight: 600;
+    color: #3C3489;
+    background: #eeedfe;
+    padding: 2px 7px;
+    border-radius: 4px;
+    width: fit-content;
+  }
+  .item .desc {
+    font-size: 12px;
+    color: #666;
+    line-height: 1.4;
+  }
+  .footer {
+    margin-top: 20px;
+    font-size: 11px;
+    color: #bbb;
+    text-align: right;
+  }
+</style>
+</head>
+<body>
+<div class="page">
+  <h1>Claude Code 指令速查表</h1>
+  <div class="subtitle">官方文档整理 · 2026年5月 · 适用于 v2.1.x</div>
+
+  <div class="section">
+    <div class="section-title">启动 / CLI 参数</div>
+    <div class="grid grid-2">
+      <div class="item"><code>claude</code><span class="desc">在当前目录启动交互式会话</span></div>
+      <div class="item"><code>claude "任务描述"</code><span class="desc">一次性执行任务后退出</span></div>
+      <div class="item"><code>claude -c</code><span class="desc">继续上一个会话</span></div>
+      <div class="item"><code>claude -r &lt;session-id&gt;</code><span class="desc">恢复指定会话</span></div>
+      <div class="item"><code>claude --model opus</code><span class="desc">指定模型（opus / sonnet / haiku）</span></div>
+      <div class="item"><code>claude --print "任务"</code><span class="desc">非交互式，输出结果到 stdout</span></div>
+      <div class="item"><code>claude --verbose</code><span class="desc">显示每次工具调用的详情</span></div>
+      <div class="item"><code>claude --no-confirm</code><span class="desc">跳过权限确认（CI 环境用）</span></div>
+      <div class="item"><code>claude --permission-mode plan</code><span class="desc">只读计划模式，不执行操作</span></div>
+      <div class="item"><code>claude --add-dir ../path</code><span class="desc">允许访问其他目录</span></div>
+    </div>
+  </div>
+
+  <div class="section">
+    <div class="section-title">会话管理指令</div>
+    <div class="grid grid-3">
+      <div class="item"><code>/clear</code><span class="desc">清空对话历史，重新开始</span></div>
+      <div class="item"><code>/compact</code><span class="desc">压缩上下文，释放 context</span></div>
+      <div class="item"><code>/context</code><span class="desc">查看当前 context 用量分布</span></div>
+      <div class="item"><code>/rewind</code><span class="desc">回滚到之前的检查点</span></div>
+      <div class="item"><code>/resume</code><span class="desc">重新打开上一个会话</span></div>
+      <div class="item"><code>/btw</code><span class="desc">快速插话不占 context</span></div>
+      <div class="item"><code>/cost</code><span class="desc">查看本次会话 token 用量</span></div>
+      <div class="item"><code>/usage</code><span class="desc">查看计划额度和速率限制</span></div>
+      <div class="item"><code>/export</code><span class="desc">导出对话内容到文件</span></div>
+      <div class="item"><code>/copy</code><span class="desc">复制最后一条回复</span></div>
+      <div class="item"><code>/diff</code><span class="desc">查看未提交的变更和 diff</span></div>
+      <div class="item"><code>/plan</code><span class="desc">进入只读计划模式</span></div>
+    </div>
+  </div>
+
+  <div class="section">
+    <div class="section-title">配置 / 权限 / 模型</div>
+    <div class="grid grid-3">
+      <div class="item"><code>/config</code><span class="desc">打开设置（主题、默认值等）</span></div>
+      <div class="item"><code>/permissions</code><span class="desc">查看/修改工具权限</span></div>
+      <div class="item"><code>/memory</code><span class="desc">查看/编辑 CLAUDE.md 文件</span></div>
+      <div class="item"><code>/model opus</code><span class="desc">切换到 Opus 4.7</span></div>
+      <div class="item"><code>/model sonnet</code><span class="desc">切换到 Sonnet 4.6</span></div>
+      <div class="item"><code>/model haiku</code><span class="desc">切换到 Haiku 4.5</span></div>
+      <div class="item"><code>/effort xhigh</code><span class="desc">最高推理强度（Opus 专用）</span></div>
+      <div class="item"><code>/add-dir</code><span class="desc">扩展本次会话的文件访问</span></div>
+      <div class="item"><code>/status</code><span class="desc">账户、模型、目录、版本信息</span></div>
+    </div>
+  </div>
+
+  <div class="section">
+    <div class="section-title">扩展 / 工具生态</div>
+    <div class="grid grid-3">
+      <div class="item"><code>/mcp</code><span class="desc">管理 MCP 服务器连接</span></div>
+      <div class="item"><code>/agents</code><span class="desc">查看/创建子 Agent</span></div>
+      <div class="item"><code>/hooks</code><span class="desc">查看 hook 事件配置</span></div>
+      <div class="item"><code>/skills</code><span class="desc">列出本次会话可用的 skill</span></div>
+      <div class="item"><code>/simplify</code><span class="desc">检查并优化近期修改的代码</span></div>
+      <div class="item"><code>/init</code><span class="desc">分析代码库，生成 CLAUDE.md</span></div>
+    </div>
+  </div>
+
+  <div class="section">
+    <div class="section-title">认证 / 系统</div>
+    <div class="grid grid-3">
+      <div class="item"><code>/login</code><span class="desc">登录 / 切换账户</span></div>
+      <div class="item"><code>/logout</code><span class="desc">登出当前账户</span></div>
+      <div class="item"><code>/doctor</code><span class="desc">诊断安装和环境问题</span></div>
+      <div class="item"><code>/help</code><span class="desc">列出所有可用指令</span></div>
+      <div class="item"><code>/feedback</code><span class="desc">向 Anthropic 反馈问题</span></div>
+      <div class="item"><code>/exit</code><span class="desc">退出 CLI</span></div>
+    </div>
+  </div>
+
+  <div class="section">
+    <div class="section-title">键盘快捷键</div>
+    <div class="grid grid-2">
+      <div class="item"><span class="key">Shift + Tab</span><span class="desc">切换权限模式：默认 → 自动接受编辑 → 只读计划</span></div>
+      <div class="item"><span class="key">Esc</span><span class="desc">中断当前回复，立即重新输入</span></div>
+      <div class="item"><span class="key">Esc Esc</span><span class="desc">打开回滚菜单，恢复到检查点</span></div>
+      <div class="item"><span class="key">Ctrl + C</span><span class="desc">取消当前输入，或空行退出</span></div>
+      <div class="item"><span class="key">Ctrl + R</span><span class="desc">反向搜索历史 prompt</span></div>
+      <div class="item"><span class="key">Ctrl + O</span><span class="desc">展开完整 transcript 视图</span></div>
+      <div class="item"><span class="key">↑ / ↓</span><span class="desc">浏览历史 prompt 记录</span></div>
+      <div class="item"><span class="key">@ + 路径</span><span class="desc">在 prompt 中直接引用文件</span></div>
+      <div class="item"><span class="key">/</span><span class="desc">打开指令菜单</span></div>
+      <div class="item"><span class="key">?</span><span class="desc">显示当前环境的快捷键列表</span></div>
+    </div>
+  </div>
+
+  <div class="section">
+    <div class="section-title">实用环境变量</div>
+    <div class="grid grid-2">
+      <div class="item"><span class="cli">CLAUDE_CODE_NO_FLICKER=1</span><span class="desc">平滑输出，不闪烁，支持鼠标滚动</span></div>
+      <div class="item"><span class="cli">ANTHROPIC_API_KEY</span><span class="desc">设置 API Key（接第三方 API 时用）</span></div>
+      <div class="item"><span class="cli">ANTHROPIC_BASE_URL</span><span class="desc">替换 API 地址（接 DeepSeek 等用）</span></div>
+      <div class="item"><span class="cli">claude auth status</span><span class="desc">检查当前认证状态</span></div>
+    </div>
+  </div>
+
+  <div class="footer">整理自 support.claude.com · 2026年5月</div>
+</div>
+</body>
+</html>
