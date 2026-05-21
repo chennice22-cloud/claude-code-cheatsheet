@@ -233,17 +233,17 @@
     padding-right: 22px; /* room for star */
   }
   .copy-btn {
-    font-size: 13px;
-    padding: 1px 5px;
+    padding: 3px 5px;
     border-radius: 4px;
     border: 1px solid var(--border);
     background: var(--btn-bg);
     color: var(--muted);
     cursor: pointer;
-    font-family: "SF Mono", monospace;
-    line-height: 1.6;
+    line-height: 0;
+    display: inline-flex;
+    align-items: center;
+    justify-content: center;
     transition: color 0.12s, background 0.12s, border-color 0.12s;
-    white-space: nowrap;
     flex-shrink: 0;
   }
   .copy-btn:hover { color: var(--text); border-color: var(--muted); }
@@ -517,7 +517,7 @@ document.querySelectorAll('.item code, .item .key, .item .cli').forEach(el => {
 
   const btn = document.createElement('button');
   btn.className = 'copy-btn';
-  btn.textContent = '⎘';
+  btn.innerHTML = `<svg width="13" height="13" viewBox="0 0 13 13" fill="none" stroke="currentColor" stroke-width="1.4" stroke-linecap="round" stroke-linejoin="round" xmlns="http://www.w3.org/2000/svg"><rect x="4" y="0.5" width="8.5" height="8.5" rx="1.5"/><rect x="0.5" y="4" width="8.5" height="8.5" rx="1.5" style="fill:var(--btn-bg)"/></svg>`;
   btn.title = '复制到剪贴板';
   row.appendChild(btn);
 
@@ -526,8 +526,8 @@ document.querySelectorAll('.item code, .item .key, .item .cli').forEach(el => {
     const text = el.textContent.trim();
     navigator.clipboard.writeText(text).then(() => {
       btn.classList.add('copied');
-      btn.textContent = '✓';
-      setTimeout(() => { btn.classList.remove('copied'); btn.textContent = '⎘'; }, 1000);
+      btn.innerHTML = `<svg width="13" height="13" viewBox="0 0 13 13" fill="none" stroke="currentColor" stroke-width="1.7" stroke-linecap="round" stroke-linejoin="round" xmlns="http://www.w3.org/2000/svg"><polyline points="1.5,7 4.5,10.5 11.5,2.5"/></svg>`;
+      setTimeout(() => { btn.classList.remove('copied'); btn.innerHTML = `<svg width="13" height="13" viewBox="0 0 13 13" fill="none" stroke="currentColor" stroke-width="1.4" stroke-linecap="round" stroke-linejoin="round" xmlns="http://www.w3.org/2000/svg"><rect x="4" y="0.5" width="8.5" height="8.5" rx="1.5"/><rect x="0.5" y="4" width="8.5" height="8.5" rx="1.5" style="fill:var(--btn-bg)"/></svg>`; }, 1000);
     });
   });
 });
